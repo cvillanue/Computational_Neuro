@@ -23,9 +23,6 @@ and NumPy cannot perform element-wise multiplication between mismatched dimensio
 r = [np.array(data['r1']), np.array(data['r2']), np.array(data['r3']), np.array(data['r4'])]
 c = [np.array(data['c1']), np.array(data['c2']), np.array(data['c3']), np.array(data['c4'])]
 
-import pickle
-import numpy as np
-
 # Load the data
 with open('pop_coding_3.4.pickle', 'rb') as f:
     data = pickle.load(f)
@@ -36,7 +33,6 @@ c = [np.array(data['c1']), np.array(data['c2']), np.array(data['c3']), np.array(
 
 # Find r_max for each neuron (avoid division by zero)
 r_max = [np.max(r_i) if np.max(r_i) > 0 else 1 for r_i in r]
-# Print debugging purposes
 print(f"\nMax firing rates per neuron (r_max): {r_max}")
 # Compute the population vector V = sum( (mean(r_i) / r_max_i) * c_i )
 V = np.sum([(np.mean(r[i]) / r_max[i]) * c[i] for i in range(4)], axis=0)

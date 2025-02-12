@@ -26,12 +26,10 @@ T = 1
 for neuron_name, firing_rates in neurons.items():
     # Convert firing rates to estimated spike counts
     spike_counts = firing_rates * T
-
-    # Compute variance and mean over trials
     mean_spike_counts = np.mean(spike_counts, axis=1)
     var_spike_counts = np.var(spike_counts, axis=1)
 
-    # Prevent division by zero by filtering zero mean values
+    # error checking:: Prevent division by zero by filtering zero mean values
     valid_indices = mean_spike_counts > 0
     if np.any(valid_indices):
         fano_factor = np.mean(var_spike_counts[valid_indices] / mean_spike_counts[valid_indices])
@@ -50,7 +48,7 @@ valid_fano_factors = {k: v for k, v in fano_factors.items() if not np.isnan(v)}
 
 if valid_fano_factors:
     # Compute deviation from the expected Poisson value (1)
-    poisson_deviation = {k: abs(np.log(v / 1)) for k, v in valid_fano_factors.items()}  # Log-normalized deviation
+    poisson_deviation = {k: abs(np.log(v / 1)) for k, v in valid_fano_factors.items()}
 
     # Instead of max absolute Fano Factor, pick the neuron with the most non-Poisson-like behavior
     non_poisson_neuron = max(poisson_deviation, key=poisson_deviation.get)
